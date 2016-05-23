@@ -1,0 +1,12 @@
+<h1>постоянные пользователи</h1>
+<table class="table" >
+<% @results.each do |row| %>
+<tr>
+  <td><%=row['username'] %></td>
+  <td><%=row['phone'] %></td>
+  <td><%=row['datestamp'] %></td>
+  <td><%=row['barber'] %></td>
+  <td><%=row['color'] %></td>
+</tr>
+<% end %>
+</table>
