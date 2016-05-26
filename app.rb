@@ -18,11 +18,6 @@ def seed_db(db, barbers)
 
 
 configure do
-  # def get_db
-  #   return SQLite3::Database.new 'BarberShop3.db'
-  # end
-  # db = get_db
-
 
   def get_db
     db = SQLite3::Database.new 'barbershop.db'
@@ -30,9 +25,13 @@ configure do
     return db
   end
 
+  before do
+    db                 = get_db
+    @barbers = db.execute 'select * from Barbers order by id desc'
+  end
+
+
   db = get_db
-
-
   db.execute 'CREATE TABLE IF NOT EXISTS
  "Users"
 (
@@ -64,6 +63,7 @@ get '/contacts' do
 end
 
 get '/visit' do
+
   erb :visit
 end
 get '/showusers' do
@@ -83,6 +83,8 @@ post '/contact' do
   haml :contacts
 end
 post '/visit' do
+  # db                 = get_db
+  # @barbers = db.execute 'select * from Barbers order by id desc'
 
   @username = params[:username]
   @phone    = params[:phone]
