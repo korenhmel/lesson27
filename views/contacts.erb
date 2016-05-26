@@ -1,19 +1,24 @@
-%h1 Наши контакты
-%p г.Киев ул.хрещатик 27/2
-%p наши контактные телефоны (093)234567  (093)222092
+<h1> Наши контакты </h1>
+<p> г.Киев ул.хрещатик 27/2 </p>
+<p> наши контактные телефоны (093)234567  (093)222092 </p>
 
-<form>{:name => "email", :id => "email", :action => "/contact", :method => "post", :enctype => "text/plain"}
+<form action="/contact" enctype="text/plain" id="email" method="post" name="email">
   <fieldset>
     <ol>
       <li>
-        <label>{:for => "message[name]"} Name:</label>
-        <input />{:type => "text", :name => "message[name]", :class => "text"}</li>
+        <label for="message[name]">Name:</label>
+        <input class="text" name="message[name]" type="text"></input>
+      </li>
       <li>
-        <label>{:for => "message[mail]"} Mail:</label>
-        <input />{:type => "text", :name => "message[mail]", :class => "text"}</li>
+        <label for="message[mail]">Mail:</label>
+        <input class="text" name="message[mail]" type="text"></input>
+      </li>
       <li>
-        <label>{:for => "message[body]"} Message:</label>
-        <textarea>{:name => "message[body]"}</textarea>
+        <label for="message[body]">Message:</label>
+        <textarea name="message[body]"></textarea>
       </li>
     </ol>
-    <input />{:type => "submit", :value => "Send", :class => "button"}</fieldset></form>
+    <input class="button" type="submit" value="Send"></input>
+  </fieldset>
+</form>
+

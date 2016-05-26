@@ -3,12 +3,36 @@ require 'sinatra'
 require 'haml'
 require 'pony'
 require 'sqlite3'
-# require 'sinatra/reloader'
+def is_barber_exists?(db, name)
+  db.execute('select * from Barbers where name=?', [name]).length > 0
+end
+#
+def seed_db(db, barbers)
+  barbers.each do |barber|
+  if !is_barber_exists?(db, barber)
+      db.execute 'insert into Barbers (name) values( ?)', [barber]
+    end
+
+ end
+ end
+
+
 configure do
+  # def get_db
+  #   return SQLite3::Database.new 'BarberShop3.db'
+  # end
+  # db = get_db
+
+
   def get_db
-    return SQLite3::Database.new 'BarberShop3.db'
+    db = SQLite3::Database.new 'barbershop.db'
+    db.results_as_hash = true
+    return db
   end
+
   db = get_db
+
+
   db.execute 'CREATE TABLE IF NOT EXISTS
  "Users"
 (
@@ -17,6 +41,13 @@ configure do
  "datestamp" TEXT, "barber" TEXT,
  "color" TEXT
 )'
+  db.execute 'CREATE TABLE IF NOT EXISTS
+ "Barbers"
+(
+"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+"name" TEXT
+)'
+  seed_db db, ['Jessie Pinkman', 'Walter White', 'Gus Fring', 'Mike Ehrmantraut']
 end
 
 get '/' do
@@ -29,23 +60,19 @@ get '/about' do
 end
 
 get '/contacts' do
-  haml :contacts
+  erb :contacts
 end
 
 get '/visit' do
   erb :visit
 end
 get '/showusers' do
-  db = get_db
+  db                 = get_db
   db.results_as_hash = true
 
-     @results = db.execute 'select * from Users order by id desc'
+  @results = db.execute 'select * from Users order by id desc'
   # @results = db.execute 'select * from Users '
 
-
-      # f = File.open("views/showusers.erb", "r")
-      # f.write "<p> visitors name: #{row['username']} дата приема #{ row['datestamp']}"
-      # f.close
   erb :showusers
 end
 post '/contact' do
@@ -84,7 +111,5 @@ values (?,?,?,?,?)', [@username, @phone, @datetime, @barber, @color]
     @succes = "#{@username}, с вами назначена встреча на #{@datetime}. Ваша персональная инф: Имя: #{@username}, телефон: #{@phone}"
     return erb :visit
   end
-
-
 end
 
